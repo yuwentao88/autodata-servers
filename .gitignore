@@ -1,0 +1,4 @@
+# Project exclude paths
+/autodata-admin/target/
+/autodata-core/target/
+/autodata-dao/target/

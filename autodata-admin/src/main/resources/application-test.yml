@@ -1,0 +1,96 @@
+server:
+  port: 8090
+spring:
+  main:
+    #懒加载生产去掉测试专用
+    lazy-initialization: true
+  jackson:
+    time-zone: GMT+8
+    application:
+      name: autodata-admin
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1000MB  #单个文件的最大上限
+      max-request-size: 1000MB #单个请求的文件总大小上限
+  datasource:
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+      username:
+      password:
+      # 初始化连接大小
+      initial-size: 5
+      # 最小空闲连接数
+      min-idle: 5
+      max-active: 20
+      max-wait: 30000
+      # 可关闭的空闲连接间隔时间
+      time-between-eviction-runs-millis: 60000
+      # 配置连接在池中的最小生存时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: select '1' from dual
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置监控统计拦截的filters
+      filters: stat
+
+      stat-view-servlet:
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: admin
+        login-password: 123456
+
+      web-stat-filter:
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+
+  #配置 Jpa
+  jpa:
+    hibernate:
+      # 生产环境设置成 none，避免程序运行时自动更新数据库结构
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  redis:
+    host:
+    password:
+    port: 6379
+    database: 0
+    #最大连接数据库连接数,设 0 为没有限制
+    lettuce:
+      pool:
+        max-active: 3
+        #最大等待连接中的数量,设 0 为没有限制
+        max-idle: 3
+        #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+        max-wait: 6000ms
+      shutdown-timeout: 100ms
+#jwt
+jwt:
+  header: Authorization
+  secret: mySecret
+  # token 过期时间 200个小时单位秒
+  expiration: 72000
+  auth:
+    # 授权路径
+    path: /login
+    # 获取用户信息
+    account: /info
+pay:
+  domain: http://npc-test.3k.com
+  timeout:
+    time: 100
+swagger:
+  title: web接口文档
+  version: 1.0.0
+  description: admin接口文档
+  basePackage: org.example.autodata.admin
